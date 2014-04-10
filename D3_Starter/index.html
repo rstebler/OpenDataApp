@@ -18,10 +18,11 @@ html, body, #map {
 }
 
 .stations svg {
-  width: 60px;
-  height: 20px;
+  width: 200px;
+  height: 40px;
   padding-right: 100px;
   font: 10px sans-serif;
+  font-weight: bold;
 }
 
 .stations circle {
@@ -29,18 +30,35 @@ html, body, #map {
   stroke: black;
   stroke-width: 1.5px;
 }
+        
+div.tooltip {   
+  position: absolute;           
+  text-align: center;           
+  width: 60px;                  
+  height: 28px;                 
+  padding: 2px;             
+  font: 12px sans-serif;        
+  background: lightsteelblue;   
+  border: 0px;      
+  border-radius: 8px;           
+  pointer-events: none;         
+}
 
     </style>
   </head>
   <body>
     <div id="map"></div>
     <script type="text/javascript">
+        
+     var div = d3.select("body").append("div")   
+    .attr("class", "tooltip")               
+    .style("opacity", 0);
 
 // Create the Google Map…
 var map = new google.maps.Map(d3.select("#map").node(), {
-  zoom: 8,
-  center: new google.maps.LatLng(37.76487, -122.41948),
-  mapTypeId: google.maps.MapTypeId.TERRAIN
+  zoom: 12,
+  center: new google.maps.LatLng(46.947756, 7.444824),
+  mapTypeId: google.maps.MapTypeId.ROADMAP
 });
 
 // Load the station data. When the data comes back, create an overlay.
@@ -56,7 +74,7 @@ d3.csv("test.csv", function(data) {
     // We could use a single SVG, but what size would it have?
     overlay.draw = function() {
       var projection = this.getProjection(),
-          padding = 10;
+          padding = 20;
 
       var marker = layer.selectAll("svg")
           .data(d3.entries(data))
@@ -67,13 +85,13 @@ d3.csv("test.csv", function(data) {
 
       // Add a circle.
       marker.append("svg:circle")
-          .attr("r", 5)
+          .attr("r", 10)
           .attr("cx", padding)
           .attr("cy", padding);
 
       // Add a label.
       marker.append("svg:text")
-          .attr("x", padding + 8)
+          .attr("x", padding + 20)
           .attr("y", padding)
           .attr("dy", ".31em")
           .text(function(d) { return d.value.Schule; });
@@ -83,8 +101,25 @@ d3.csv("test.csv", function(data) {
           console.log(d.value.Schule + " clicked");
       });
         
+      // Add mouseover event.
+      marker.on("mouseover", function(d) {      
+        div.transition()        
+          .duration(200)      
+          .style("opacity", .9);      
+        div .html(d.value.Schule)  
+          .style("left", (d3.event.pageX) + "px")     
+          .style("top", (d3.event.pageY - 28) + "px");    
+      });
+        
+      // Add mouseout event.
+      marker.on("mouseout", function(d) {
+        div.transition()        
+          .duration(500)      
+          .style("opacity", 0);   
+      });
+        
       function transform(d) {
-        d = new google.maps.LatLng(d.value[1], d.value[0]);
+        d = new google.maps.LatLng(d.value.lat, d.value.lng);
         d = projection.fromLatLngToDivPixel(d);
         return d3.select(this)
             .style("left", (d.x - padding) + "px")
