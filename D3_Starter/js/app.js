@@ -109,7 +109,7 @@
           tooltip.transition()        
             .duration(200)      
             .style("opacity", .9);      
-          tooltip.html(d.value.Schule)  
+          tooltip.html(d.value.Schule + "<br>" + d.value.Anzahl_Schueler)  
             .style("left", (d3.event.pageX) + "px")     
             .style("top", (d3.event.pageY - 28) + "px");    
         });
@@ -122,6 +122,11 @@
         });
         
         function transform(d) {
+            if((d.value.TabZeileNeu % 2 == 1 && map.getZoom() >= 14) || d.value.TabZeileNeu % 2 == 0 && map.getZoom() < 14) {
+                d3.select(this).style("visibility", "hidden");
+            } else {
+                d3.select(this).style("visibility", "visible");
+            }
           e = new google.maps.LatLng(d.value.lat, d.value.lng);
           e = projection.fromLatLngToDivPixel(e);
           d3.select(this).select("circle")
@@ -136,7 +141,10 @@
         }
         
         function calculateRadius(d) {
-          return d.value.Anzahl_Schueler * map.getZoom() * map.getZoom() / 2000;
+          var r = 0.05 * d.value.Anzahl_Schueler + 2*map.getZoom() -25;
+          if(r <= 0)
+            r = 1;
+          return r;
         }
         
         function calculatePadding(d) {
@@ -175,14 +183,14 @@
       }
 
       switch(selectedChart) {
-      case "lang":
-        newData = [{count: element.Anzahl_Schueler - element.Anzahl_Fremdspr, name: element.Unterrichtssprache, region: "east"}, {count: element.Anzahl_Fremdspr, name: "andere", region: "west"}]; 
-        break;
-      case "ausl":
-        newData = [{count: element.Anzahl_Schueler - element.Anzahl_Ausl, name: "Schweizer", region: "east"}, {count: element.Anzahl_Ausl, name: "Ausländer", region: "west"}];
-        break;
-      default:
-        newData = [{count: element.Anzahl_Schueler - element.Anzahl_Frauen, name: "männlich", region: "east"}, {count: element.Anzahl_Frauen, name: "weiblich", region: "west"}]; 
+        case "lang":
+          newData = [{count: element.Anzahl_Schueler - element.Anzahl_Fremdspr, name: element.Unterrichtssprache, region: "east"}, {count: element.Anzahl_Fremdspr, name: "andere", region: "west"}]; 
+          break;
+        case "ausl":
+          newData = [{count: element.Anzahl_Schueler - element.Anzahl_Ausl, name: "Schweizer", region: "east"}, {count: element.Anzahl_Ausl, name: "Ausländer", region: "west"}];
+          break;
+        default:
+          newData = [{count: element.Anzahl_Schueler - element.Anzahl_Frauen, name: "männlich", region: "east"}, {count: element.Anzahl_Frauen, name: "weiblich", region: "west"}]; 
       }
       
       var data0 = path.data(),
@@ -192,11 +200,8 @@
 
       path.enter().append("path")
         .each(function(d, i) { this._current = findNeighborArc(i, data0, data1, key) || d; })
-        .append("title");
       
-      path.attr("fill", function(d) { return getColor(d.data.name); })
-        .select("title")
-        .text(function(d) { return d.data.name; });
+      path.attr("fill", function(d) { return getColor(d.data.name); });
 
       path.exit()
         .datum(function(d, i) { return findNeighborArc(i, data1, data0, key) || d; })
@@ -208,6 +213,23 @@
       path.transition()
         .duration(750)
         .attrTween("d", arcTween);
+        
+      // Add mouseover event.
+      path.on("mouseover", function(d) {      
+        tooltip.transition()        
+          .duration(200)      
+          .style("opacity", .9);      
+        tooltip.html(d.data.name)  
+          .style("left", (d3.event.pageX) + "px")     
+          .style("top", (d3.event.pageY - 28) + "px");    
+      });
+        
+      // Add mouseout event.
+      path.on("mouseout", function(d) {
+        tooltip.transition()        
+          .duration(500)      
+          .style("opacity", 0);   
+      });
     }
   });
   
