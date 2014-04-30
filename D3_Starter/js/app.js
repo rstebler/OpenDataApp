@@ -71,7 +71,7 @@
   
   // --- LOAD CSV --
   // Load the csv data. When the data comes back, create an overlay.
-  d3.csv("test.csv", function(data) {
+  d3.csv("schulstat_2012_20131108_mit_koordinaten.csv", function(data) {
     // --- MAP ---
     var overlay = new google.maps.OverlayView();
 
@@ -122,26 +122,32 @@
         });
         
         function transform(d) {
-            if((d.value.TabZeileNeu % 2 == 1 && map.getZoom() >= 14) || d.value.TabZeileNeu % 2 == 0 && map.getZoom() < 14) {
-                d3.select(this).style("visibility", "hidden");
-            } else {
-                d3.select(this).style("visibility", "visible");
-            }
-          e = new google.maps.LatLng(d.value.lat, d.value.lng);
-          e = projection.fromLatLngToDivPixel(e);
-          d3.select(this).select("circle")
-            .attr("r", calculateRadius)
-            .attr("cx", calculatePadding)
-            .attr("cy", calculatePadding);
-          return d3.select(this)
-            .style("left", (e.x - calculatePadding(d)) + "px")
-            .style("top", (e.y - calculatePadding(d)) + "px")
-            .style("width", calculateRadius(d)*2+2 + "px")
-            .style("height", calculateRadius(d)*2+2 + "px");
+          if((d.value.TabZeileNeu == 41 && map.getZoom() >= 14) || (d.value.TabZeileNeu == 31 && map.getZoom() < 14 && map.getZoom() >= 10) || (d.value.TabZeileNeu == 11 && map.getZoom() < 10)) {
+            d3.select(this).style("visibility", "visible");
+            e = new google.maps.LatLng(d.value.lat, d.value.lng);
+            e = projection.fromLatLngToDivPixel(e);
+            d3.select(this).select("circle")
+              .attr("r", calculateRadius)
+              .attr("cx", calculatePadding)
+              .attr("cy", calculatePadding);
+            return d3.select(this)
+              .style("left", (e.x - calculatePadding(d)) + "px")
+              .style("top", (e.y - calculatePadding(d)) + "px")
+              .style("width", calculateRadius(d)*2+2 + "px")
+              .style("height", calculateRadius(d)*2+2 + "px");
+          } else
+            d3.select(this).style("visibility", "hidden");
         }
         
         function calculateRadius(d) {
-          var r = 0.05 * d.value.Anzahl_Schueler + 2*map.getZoom() -25;
+          var r = 0;
+          if(d.value.TabZeileNeu == 41 && map.getZoom() >= 14)
+            r = 0.03 * d.value.Anzahl_Schueler * (0.5 * map.getZoom() - 4.5) + 2;
+          else if(d.value.TabZeileNeu == 31 && map.getZoom() < 14 && map.getZoom() >= 10)
+            r = 0.005 * d.value.Anzahl_Schueler * (0.5 * map.getZoom() - 4.7) + 2;
+          else
+            r = 0.001 * d.value.Anzahl_Schueler * (0.5 * map.getZoom() - 3.4) + 10; 
+
           if(r <= 0)
             r = 1;
           return r;
