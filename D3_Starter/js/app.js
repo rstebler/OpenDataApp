@@ -245,7 +245,7 @@
       }
       for(i=0; i<data1.length; i++) {
         var prozent = round(data1[i].value / total * 100,2);
-        text += "<br>" + data1[i].data.name +": " + prozent + "%";
+        text += "<br>" + data1[i].data.name + ": " + data1[i].value + " (" + prozent + "%)";
       }
         
       textBox.html(text);
