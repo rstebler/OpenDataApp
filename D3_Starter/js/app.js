@@ -10,6 +10,33 @@
     center: new google.maps.LatLng(46.7988621, 7.7080701),
     mapTypeId: google.maps.MapTypeId.ROADMAP
   });
+     
+
+  // Create the search box and link it to the UI element.
+  var input = /** @type {HTMLInputElement} */(
+      document.getElementById('pac-input'));
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+  var searchBox = new google.maps.places.SearchBox(
+    /** @type {HTMLInputElement} */(input));
+
+  // [START region_getplaces]
+  // Listen for the event fired when the user selects an item from the
+  // pick list. Retrieve the matching places for that item.
+  google.maps.event.addListener(searchBox, 'places_changed', function() {
+    var places = searchBox.getPlaces();
+
+    // For each place, get the icon, place name, and location.
+    var bounds = new google.maps.LatLngBounds();
+    for (var i = 0, place; place = places[i]; i++) {
+
+      bounds.extend(place.geometry.location);
+    }
+
+    map.fitBounds(bounds);
+      map.setZoom(12);
+  });
+  // [END region_getplaces]
   
   
   // --- CHARTS INITIALIZATION ---
