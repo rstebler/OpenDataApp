@@ -6,8 +6,8 @@
 
   // Create the Google Map…
   var map = new google.maps.Map(d3.select("#map").node(), {
-    zoom: 12,
-    center: new google.maps.LatLng(46.947756, 7.444824),
+    zoom: 9,
+    center: new google.maps.LatLng(46.7988621, 7.7080701),
     mapTypeId: google.maps.MapTypeId.ROADMAP
   });
   
@@ -22,7 +22,7 @@
       value: "gender"
     });
   form.append("label")
-    .text("Geschlecht");
+    .text("Geschlecht").append("br");
     
   form.append("input")
     .attr({
@@ -31,7 +31,7 @@
       value: "lang"
     });
   form.append("label")
-    .text("Sprache");
+    .text("Sprache").append("br");
     
   form.append("input")
     .attr({
@@ -56,7 +56,7 @@
     .sort(null);
 
   var arc = d3.svg.arc()
-    .innerRadius(radius - width/7)
+    .innerRadius(0)
     .outerRadius(radius - 20);
 
   var svg = d3.select("#chart").append("svg")
@@ -176,7 +176,7 @@
       .property("checked", true);
 
     function change() {
-      var dataset = data.filter(function(d) { return (selectedElement == undefined && d.Schule == "Total Kanton Bern nach Schulstufe") || d == selectedElement; });
+      var dataset = data.filter(function(d) { return (selectedElement == undefined && d.Schule == "Kanton Bern") || d == selectedElement; });
       if(dataset.length == 0) {
         dataset = data;
       }
@@ -191,7 +191,7 @@
 
       switch(selectedChart) {
         case "lang":
-          newData = [{count: element.Anzahl_Schueler - element.Anzahl_Fremdspr, name: element.Unterrichtssprache, region: "east"}, {count: element.Anzahl_Fremdspr, name: "andere", region: "west"}]; 
+          newData = [{count: element.Anzahl_Schueler - element.Anzahl_Fremdspr, name: "Landessprache", region: "east"}, {count: element.Anzahl_Fremdspr, name: "andere", region: "west"}]; 
           break;
         case "ausl":
           newData = [{count: element.Anzahl_Schueler - element.Anzahl_Ausl, name: "Schweizer", region: "east"}, {count: element.Anzahl_Ausl, name: "Ausländer", region: "west"}];
@@ -239,7 +239,7 @@
       });
         
       var total = 0;
-      var text = element.Schule + "<br>" + "Anzahl Schüler: " + element.Anzahl_Schueler;
+      var text = "<b>" + element.Schule + "</b><br>" + "Anzahl Schüler: " + element.Anzahl_Schueler;
       for(i=0; i<data1.length; i++) {
         total += data1[i].value;
       }
@@ -277,7 +277,7 @@
       return "#FFC400";
     case "Französisch":
       return "#A674FC";
-    case "-":
+    case "Landessprache":
       return "#FFC400";
     case "andere":
       return "#A674FC";          
