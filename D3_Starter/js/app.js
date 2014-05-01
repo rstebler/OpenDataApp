@@ -65,8 +65,9 @@
     .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-  var path = svg.selectAll("path");        
-  
+  var path = svg.selectAll("path");
+     
+  var textBox = d3.select("#text");
   
   
   // --- LOAD CSV --
@@ -175,7 +176,7 @@
       .property("checked", true);
 
     function change() {
-      var dataset = data.filter(function(d) { return d == selectedElement; });
+      var dataset = data.filter(function(d) { return (selectedElement == undefined && d.Schule == "Total Kanton Bern nach Schulstufe") || d == selectedElement; });
       if(dataset.length == 0) {
         dataset = data;
       }
@@ -236,11 +237,28 @@
           .duration(500)      
           .style("opacity", 0);   
       });
+        
+      var total = 0;
+      var text = element.Schule + "<br>" + "Anzahl Schüler: " + element.Anzahl_Schueler;
+      for(i=0; i<data1.length; i++) {
+        total += data1[i].value;
+      }
+      for(i=0; i<data1.length; i++) {
+        var prozent = round(data1[i].value / total * 100,2);
+        text += "<br>" + data1[i].data.name +": " + prozent + "%";
+      }
+        
+      textBox.html(text);
     }
   });
   
   // --- CHARTS FUNCTIONS ---
   
+  function round(number, decimals){
+    //Rundet eine Zahl auf eine bestimmte Nachkommastelle
+    return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals);
+  }
+     
   function key(d) {
     return d.data.region;
   }

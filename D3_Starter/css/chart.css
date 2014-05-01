@@ -17,3 +17,10 @@ form {
 input {
   margin: 0 7px;
 }
+
+#text {
+  font-family: Arial, Helvetica, sans-serif;
+  position: absolute;
+  left: 61%;
+  top: 2%;
+}
