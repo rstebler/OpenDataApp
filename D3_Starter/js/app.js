@@ -56,7 +56,7 @@
     .sort(null);
 
   var arc = d3.svg.arc()
-    .innerRadius(radius - 100)
+    .innerRadius(radius - width/7)
     .outerRadius(radius - 20);
 
   var svg = d3.select("#chart").append("svg")
