@@ -14,7 +14,7 @@
   
   // --- CHARTS INITIALIZATION ---
   // Add radio buttons
-  var form = d3.select("#chart").append("form");
+  var form = d3.select("#radioButtons").append("form");
   form.append("input")
     .attr({
       type: "radio",
