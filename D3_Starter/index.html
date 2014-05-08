@@ -11,10 +11,17 @@
     <script type="text/javascript" src="js/app.js" charset="utf-8"></script>
   </head>
   <body onload="runApp();">
-    <div id="map"></div>
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-    <div id="radioButtons"></div>
-    <div id="chart"></div>
-    <div id="text">Daten werden geladen... <img src="images/loader.gif" alt="Loading..." /></div>
+    <div id="header">
+      <div id="title">Visualisierung der Volksschuldaten des Kanton Bern</div>
+      <div id="description">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</div>
+    </div>
+    <div id="app">
+      <div id="map"></div>
+      <input id="pac-input" class="controls" type="text" placeholder="Ort suchen">
+      <div id="text">Daten werden geladen... <img src="images/loader.gif" alt="Loading..." /></div>
+      <div id="radioButtons"><b>Diagramm:</b></div>
+      <div id="chart"></div>
+    </div>
+    <div id="footer">Erstellt von Nadine Liechti und Roger Stebler mit Hilfe von <a href="http://d3js.org/" target="_blank">D3</a> - Datenquelle: <a href="http://www.erz.be.ch/schulstatistik" target="_blank">Erziehungsdirektion des Kantons Bern</a></div>
   </body>
 </html>

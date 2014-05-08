@@ -34,3 +34,7 @@ div.tooltip {
 text {
   font: 10px sans-serif;
 }
+
+#pac-input {
+  margin-top: 5px;
+}
