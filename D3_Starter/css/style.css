@@ -4,6 +4,7 @@
   height: 100%;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 #header {
@@ -21,10 +22,9 @@
 }
 
 #app {
-  position: absolute;
+  position: relative;
   width: 100%;
-  height: auto;
-  top: 150px;
+  top: 0;
   bottom: 20px;
   margin: 0;
   padding: 0;

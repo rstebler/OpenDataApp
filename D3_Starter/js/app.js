@@ -1,4 +1,7 @@
 ﻿function runApp() {
+  var appHeight = window.innerHeight - parseInt(d3.select("#header").style("height")) - parseInt(d3.select("#footer").style("height")) - 2 * parseInt(d3.select("#header").style("padding"));
+  d3.select("#app").style("height", appHeight + "px");
+
   // --- MAP INITIALIZATION ---
   var tooltip = d3.select("body").append("div")   
     .attr("class", "tooltip")               
